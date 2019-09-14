@@ -4,6 +4,31 @@ let morgan = require('morgan');
 let pg = require('pg');
 const PORT = 3000;
 
+let pool = new pg.Pool({
+    port: 5432,
+    password: 'very_secure_password',
+    database: 'countries',
+    max: 10,
+    host: 'localhost',
+    user: 'postgres'
+});
+
+pool.connect((err, db, done) => {
+    if (err) {
+        return console.log(err);
+    }
+    else {
+        db.query('SELECT * FROM country', (err, table) => {
+            if (err) {
+                return console.log(err)
+            }
+            else {
+                console.log(table)
+            }
+        })
+    }
+});
+
 let app = express();
 
 app.use(bodyParser.json());
